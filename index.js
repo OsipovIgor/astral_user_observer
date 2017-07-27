@@ -9,16 +9,35 @@ app.get('/', function(req, res){
 
 var users = [];
 
-io.on('connection', function(socket){
+function getCurrentUsers(){
+  return users.map(function(u){ return u.name });
+}
+
+io.on('connection', function(socket) {
   
   var username = socket.handshake.query.username;
-  
-  if(users.indexOf(username) === -1)
-    users.push(socket.handshake.query.username);
+  var index = users.findIndex(function(elem) {
+      return elem.name === socket.username;
+    });
+  console.log("index", index);
+  if (index === -1) {
+    users.push({ id: socket.id, name: socket.handshake.query.username });
+    console.log("added user");
+  }
+    
 
-  console.log("users", users);
+  console.log("users after connect", getCurrentUsers());
+
   socket.on('disconnect', function() {
-    console.log("disconnected");
+    var index = users.findIndex(function(elem) {
+      return elem.id === socket.id;
+    });
+
+    if (index !== -1)
+      users = users.splice(index, 1);
+
+    console.log("users after disconect", getCurrentUsers());
+
   });
 });
 
