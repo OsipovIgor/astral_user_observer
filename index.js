@@ -23,7 +23,7 @@ io.on('connection', function(socket) {
   app.post('/send', (req, res) => {
     const { message } = req.body;
     
-    io.sockets.broadcast.emit("message", message);
+    io.local.emit("message", message);
     return res.sendStatus(200);
   });
 
