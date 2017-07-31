@@ -30,7 +30,7 @@ class UserManager {
   /**
    * Вывод текущих пользователей
    */
-  print() {
+  getUsers() {
     return this.users.map(u => u.name);
   }
 }

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Astral user observer",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.2",
     "socket.io": "^2.0.3"
   }
