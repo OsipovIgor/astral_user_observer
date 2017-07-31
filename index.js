@@ -1,5 +1,3 @@
-const { UserManager } = require("./managers/UserManager");
-
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -13,23 +11,27 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-  return res.json(UserManager.getUsers());
+  const { rooms } = io.sockets.adapter;
+
+  return res.json(Object.entries(rooms).filter(u => !u[1].sockets[u[0]]).map(n => n[0]));
+});
+
+app.post('/send', (req, res) => {
+  const { username, message } = req.body;
+  
+  if (!username) {
+    res.statusCode = 500;
+    return res.send("Не указан username");
+  }
+    
+  io.to(username).emit("message", message);
+  return res.sendStatus(200);
 });
 
 io.on('connection', function(socket) {
   const username = socket.handshake.query.username;
-  UserManager.connect(socket.id, username);
 
-  app.post('/send', (req, res) => {
-    const { message } = req.body;
-    
-    io.local.emit("message", message);
-    return res.sendStatus(200);
-  });
-
-  socket.on('disconnect', function() {
-    UserManager.disconnect(socket.id);
-  });
+  socket.join(username);
 });
 
 http.listen(3228, function(){
