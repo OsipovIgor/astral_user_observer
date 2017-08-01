@@ -5,6 +5,14 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.2",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.10"
+  },
+  "scripts": {
+    "dev-frontend": "react-scripts start",
+    "build-frontend": "react-scripts build",
+    "start": "node server.js"
   }
 }
