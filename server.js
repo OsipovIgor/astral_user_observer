@@ -16,22 +16,37 @@ app.get('/users', (req, res) => {
   return res.json(Object.entries(rooms).filter(u => !u[1].sockets[u[0]]).map(n => n[0]));
 });
 
-app.post('/send', (req, res) => {
+app.post('/send_users', (req, res) => {
   const { username, message } = req.body;
-  
+
   if (!username) {
     res.statusCode = 500;
-    return res.send("Не указан username");
+    return res.send("Не указан username ");
   }
     
   io.to(username).emit("message", message);
   return res.sendStatus(200);
 });
 
-io.on('connection', function(socket) {
-  const username = socket.handshake.query.username;
+app.post('/send_abonents', (req, res) => {
+  const { abonentGuid, message } = req.body;
 
-  socket.join(username);
+  if (!abonentGuid) {
+    res.statusCode = 500;
+    return res.send("Не указан abonentGuid");
+  }
+
+  io.to(abonentGuid).emit("message", message);
+  return res.sendStatus(200);
+});
+
+io.on('connection', function(socket) {
+  const { username, abonentGuid } = socket.handshake.query;
+
+  if (username)
+    socket.join(username);
+  if (abonentGuid)
+    socket.join(abonentGuid);
 });
 
 http.listen(3228, function(){
