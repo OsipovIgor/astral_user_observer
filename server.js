@@ -1,7 +1,9 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var bodyParser = require('body-parser');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const bodyParser = require('body-parser');
+
+const roomHelper = require('./helpers/RoomHelper');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,7 +15,13 @@ app.get('/', (req, res) => {
 app.get('/users', (req, res) => {
   const { rooms } = io.sockets.adapter;
 
-  return res.json(Object.entries(rooms).filter(u => !u[1].sockets[u[0]]).map(n => n[0]));
+  return res.json(roomHelper.getUniqueItems(rooms).filter(entity => entity.length !== 36));
+});
+
+app.get('/abonents', (req, res) => {
+  const { rooms } = io.sockets.adapter;
+
+  return res.json(roomHelper.getUniqueItems(rooms).filter(entity => entity.length === 36));
 });
 
 app.post('/send_users', (req, res) => {
