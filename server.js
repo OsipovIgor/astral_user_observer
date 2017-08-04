@@ -25,26 +25,26 @@ app.get('/abonents', (req, res) => {
 });
 
 app.post('/send_users', (req, res) => {
-  const { username, message } = req.body;
+  const { username, event } = req.body;
 
   if (!username) {
     res.statusCode = 500;
     return res.send("Не указан username ");
   }
     
-  io.to(username).emit("message", message);
+  io.to(username).emit("message", event);
   return res.sendStatus(200);
 });
 
 app.post('/send_abonents', (req, res) => {
-  const { abonentGuid, message } = req.body;
+  const { abonentGuid, event } = req.body;
 
   if (!abonentGuid) {
     res.statusCode = 500;
     return res.send("Не указан abonentGuid");
   }
 
-  io.to(abonentGuid).emit("message", message);
+  io.to(abonentGuid).emit("message", event);
   return res.sendStatus(200);
 });
 
