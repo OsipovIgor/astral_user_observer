@@ -8,6 +8,13 @@ const roomHelper = require('./helpers/RoomHelper');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function(req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    next();
+});
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + 'public/index.html');
 });

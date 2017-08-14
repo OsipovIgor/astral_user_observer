@@ -3,12 +3,14 @@
   "version": "0.0.1",
   "description": "Astral user observer",
   "dependencies": {
+    "antd": "^2.12.3",
     "body-parser": "^1.17.2",
     "express": "^4.15.2",
-    "socket.io": "^2.0.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.10"
+    "react-scripts": "1.0.10",
+    "socket.io": "^2.0.3",
+    "axios": "0.16.2"
   },
   "scripts": {
     "dev-frontend": "react-scripts start",
